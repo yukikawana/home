@@ -19,11 +19,15 @@ let s:colors_dir = s:cache_home . '/colors'
   call system('wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim -P '. shellescape(s:colors_dir))
 endif
 let &runtimepath = s:dein_repo_dir .",". &runtimepath
+""set runtimepath += expand(dein_repo_dir)
 " プラグイン読み込み＆キャッシュ作成
 let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/dein.toml'
+let s:toml_lazy_file = fnamemodify(expand('<sfile>'), ':h').'/dein_lazy.toml'
 if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
-  call dein#load_toml(s:toml_file)
+  call dein#begin(s:dein_dir)
+  call dein#load_toml(s:toml_file, {'lazy': 0})
+  call dein#load_toml(s:toml_lazy_file, {'lazy': 1})
+  ""call dein#load_toml(s:toml_file)
   call dein#end()
   call dein#save_state()
 endif
@@ -65,7 +69,13 @@ set backspace=indent,eol,start
 set nowritebackup
 set nobackup
 set noswapfile
-
+augroup fileTypeIndent
+    autocmd!
+        autocmd BufNewFile,BufRead *.hpp setlocal tabstop=2 softtabstop=2 shiftwidth=2 
+        autocmd BufNewFile,BufRead *.h setlocal tabstop=2 softtabstop=2 shiftwidth=2
+        autocmd BufNewFile,BufRead *.cpp setlocal tabstop=2 softtabstop=2 shiftwidth=2
+        autocmd BufNewFile,BufRead *.c setlocal tabstop=2 softtabstop=2 shiftwidth=2
+augroup END
 set list                " 不可視文字の可視化
 set number              " 行番号の表示
 set wrap                " 長いテキストの折り返し
@@ -114,3 +124,6 @@ nnoremap <C-l> <C-w>l
 cmap w!! w !sudo tee > /dev/null %
 "set mouse=a
 "set ttymouse=xterm2
+
+inoremap <silent> jj <C-O>:stopinsert<CR>
+inoremap <silent> <C-c> <C-O>:stopinsert<CR>

@@ -1,2 +1,2 @@
 100
-['Shougo/dein.vim', 'Shougo/unite.vim', 'Shougo/vimfiler']
+['Shougo/dein.vim', 'cespare/vim-toml']
